@@ -1,7 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 function SideborLayout(){
+    const navigati = useNavigate()
+    function logout(){
+        localStorage.removeItem("auth");
+   navigati("/")
+   toast.warn("Siz tizimdan chiqib ketdingiz!!!")
+    }
     return(
         <>
-            <div class="flex min-h-screen transition-colors duration-300">
+            <div >
                 <aside class="fixed left-0 top-0 h-screen bg-white border-r border-gray-200 transition-all duration-300 z-20 w-64">
                     <div class="p-4 border-b border-gray-200 flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -31,7 +40,7 @@ function SideborLayout(){
                     </div>
 
                     <nav class="p-4 space-y-2">
-                        <a href="/"
+                        <a href="/dashoard"
                             class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -86,6 +95,9 @@ function SideborLayout(){
                             </svg>
                             <h1>Settings</h1>
                         </a>
+                        <button onClick={logout}
+                         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
+                            Logout</button>
                     </nav>
                 </aside>
             </div>

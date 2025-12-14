@@ -1,33 +1,56 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
-function TeachersPagas(){
+function TeachersPagas() {
 
-    const [teachers , setTeachers] = useState([]);
-     
-     useEffect(() => {
+    const [teachers, setTeachers] = useState([]);
+    const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState("");
 
-   async  function getAllTeachers(){
-        try{
-     let res = await axios.get(
-        "https://69242f5d3ad095fb84730f49.mockapi.io/teachers"
-     )
-     console.log(res.data);
-     setTeachers(res.data)
-        }catch(err){
-            console.log(err);   
+    async function getAllTeachers() {
+        try {
+            let res = await axios.get(
+                `https://69242f5d3ad095fb84730f49.mockapi.io/teachers?name=${search}`
+            )
+            setTeachers(res.data)
+            setLoading(false)
+        } catch (err) {
+            console.log(err);
         }
-     }
+    }
+    useEffect(() => {
+        getAllTeachers();
+    }, [search])
+    console.log(teachers);
 
-         getAllTeachers();
-     } , [])
-     console.log(teachers);
-     
+    async function deleteTeacher(id) {
+        try {
+            await axios.delete(`https://69242f5d3ad095fb84730f49.mockapi.io/teachers/${id}`)
+            toast(`You deleted the teacher with ID ${id}`)
+            getAllTeachers();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    deleteTeacher()
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center flex-col h-screen">
+                <div className=" relative w-[100px] h-[100px] border-[4px] border-black-500 rounded-[50px] animate-spin font-bold  flex
+            items-center justify-center flex-col   ">
+                    <span className="absolute  w-[20px] h-[4px] bg-[white] rounded-[4px] top-[-4px] block "></span>
+                </div>
+            </div>
+        )
+    }
 
 
-    return(
-                <>
+    return (
+        <>
             <div class="flex-1 transition-all duration-300 ml-64 bg-gray-50">
                 <header
                     class="bg-white  border-b border-gray-200  px-8 py-4 flex items-center justify-between 
@@ -54,7 +77,8 @@ function TeachersPagas(){
                                 <h2 class="text-black mb-2">Teachers</h2>
                                 <p class="text-[12px] text-gray-400">Showing 24 of 24 teachers</p>
                             </div>
-                            <button id="cardbtn"
+
+                            <button
                                 class="inline-flex items-center justify-center text-white text-[12px]  rounded-md text-sm font-medium transition-all   
                        h-9 px-4 py-2  gap-2 bg-gradient-to-r from-blue-500 to-purple-600 ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -75,7 +99,9 @@ function TeachersPagas(){
                                     <path d="m21 21-4.34-4.34"></path>
                                     <circle cx="11" cy="11" r="8"></circle>
                                 </svg>
-                        
+                                <input onChange={(e) => setSearch(e.target.value)}
+                                    type="text" className="flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base  outline-none 
+                               pl-10 bg-white  border-gray-200"     placeholder="Search teachers by name..." />
                             </div>
                             <div class="flex flex-wrap items-center gap-[10px]">
                                 <form class="max-w-sm mx-auto ">
@@ -124,18 +150,19 @@ function TeachersPagas(){
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {
-                            teachers.map((el) => (
-                                
-                                    <div
+                            {
+                                teachers.map((el) => (
+
+                                    <div key={el.id}
                                         class="text-card-foreground flex flex-col gap-6 rounded-xl border p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white  border-gray-200 border-gray-200 group">
                                         <div class="flex flex-col items-center text-center mb-4">
                                             <a href="../packalar/teachers-students.html?teacherId=${el.id}"
                                                 class="relative flex size-10  overflow-hidden rounded-full h-20 w-20 mb-3  ring-blue-100 ">
-                                                <img src={el.avatar} className="aspect-square size-full" alt="" />
-
+                                                <Link to={`/teachers/${el.id}`}>
+                                                    <img src={el.avatar} className="aspect-square size-full" alt="" />
+                                                </Link>
                                             </a>
-                                            <h3 class="text-[15px] text-black mb-1">{el.name}</h3>
+                                            <h3 class="text-[15px] text-black mb-1">{el.name}{el.id}</h3>
                                             <h1 class="items-center justify-center rounded-md border border-gray-200 px-2 py-0.5 text-xs bg-gray-300 mb-[10px]">{el.profession}</h1>
                                             <div class="flex items-center gap-4 text-gray-600 dark:text-gray-400 mb-3">
                                                 <span
@@ -229,8 +256,10 @@ function TeachersPagas(){
                                                     <path d="m15 5 4 4"></path></svg>
                                                 Edit</button>
                                             <button
+                                                onClick={() => deleteTeacher(el.id)}
                                                 class="inline-flex items-center justify-center  text-sm font-medium transition-all
-                                 border bg-background  h-8 rounded-md px-3  flex-1 gap-2 text-red-600 "><svg
+                                 border bg-background  h-8 rounded-md px-3  flex-1 gap-2 text-red-600 ">
+                                                <svg
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round" class="lucide lucide-trash2 lucide-trash-2 h-4 w-4"
@@ -240,19 +269,21 @@ function TeachersPagas(){
                                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                                                     <path d="M3 6h18"></path>
                                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                </svg>Delete</button></div>
+                                                </svg>
+                                                Delete</button>
+                                        </div>
                                     </div>
-                               
-                            ))
-                        }  
-             </div>
+
+                                ))
+                            }
+                        </div>
                     </div>
 
                 </main>
             </div>
-           
-             
-        
+
+
+
 
         </>
     )

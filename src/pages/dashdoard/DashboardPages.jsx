@@ -1,4 +1,7 @@
+import { useState } from "react"
+
 function DashboardPages(){
+
     return(
         <>
             <div class="flex-1 transition-all duration-300 ml-64 bg-gray-50">

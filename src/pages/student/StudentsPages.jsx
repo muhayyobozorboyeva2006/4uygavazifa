@@ -1,23 +1,41 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 
 function StudentsPages(){
     const [students , setStudents] = useState([]);
+    const [loading , setLoading] = useState(true)
+    const [search , setSearch]   = useState("")
     useEffect(() => {
 async  function getAllStudents(){
 try{
 let reslar = await axios.get(
-    "https://69242f5d3ad095fb84730f49.mockapi.io/students"
+    `https://69242f5d3ad095fb84730f49.mockapi.io/students?name=${search}`
 )
 console.log(reslar.data);
 setStudents(reslar.data);
+setLoading(false)
 }catch(err){
     console.log(err);
     
 }
 }
+
 getAllStudents()
-    } , [])
+    } , [search])
+
+if(loading){
+    return(
+        <div className="flex items-center justify-center flex-col h-screen">
+            <div className=" relative w-[100px] h-[100px] border-[4px] border-black-500 rounded-[50px] animate-spin font-bold  flex
+    items-center justify-center flex-col   ">
+                <span className="absolute  w-[20px] h-[4px] bg-[white] rounded-[4px] top-[-4px] block "></span>
+            </div>
+        </div>
+    )
+}
+
+
     return(
         <>
             <div class="flex-1 transition-all duration-300 ml-64 bg-gray-50">
@@ -54,15 +72,18 @@ getAllStudents()
                         </div>
                         <div class="mb-6 space-y-4">
                             <div class="relative">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
-                                    aria-hidden="true">
-                                    <path d="m21 21-4.34-4.34"></path>
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                </svg>
-                            
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-search absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+                                aria-hidden="true">
+                                <path d="m21 21-4.34-4.34"></path>
+                                <circle cx="11" cy="11" r="8"></circle>
+                            </svg>
+                            <input onChange={(e) => setSearch(e.target.value)}
+                                type="text" className="flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base  outline-none 
+                               pl-10 bg-white  border-gray-200"     placeholder="Search Students by name..." />
+                        </div>
                             <div class="flex flex-wrap items-center gap-[10px]">
                                 <form class="max-w-sm mx-auto ">
                                     <select id="countries"
@@ -115,9 +136,9 @@ getAllStudents()
                                 students.map((el) => (
                                     <div class="text-card-foreground flex flex-col gap-6 rounded-xl border p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white  border-gray-200  group">
                                         <div class="flex flex-col items-center text-center mb-4">
-                                            <a href="../packalar/students-teaders.html?studentsId=${el.id}" class="relative flex size-10 shrink-0 overflow-hidden rounded-full h-20 w-20 mb-3 ring-4 ring-purple-100 dark:ring-purple-900">
+                                            <Link to={`/students/${el.id}`} class="relative flex size-10 shrink-0 overflow-hidden rounded-full h-20 w-20 mb-3 ring-4 ring-purple-100 dark:ring-purple-900">
                                                 <img className="aspect-square size-full" src={el.avatar} alt="" />
-                                            </a>
+                                            </Link>
                                             <h3 class="text-black mb-1">{el.name}</h3>
                                             <div class="flex items-center gap-2 mb-3">
                                                 <h1
@@ -209,7 +230,8 @@ getAllStudents()
                                                     </path>
                                                     <path d="m15 5 4 4"></path>
                                                 </svg>Edit</button>
-                                            <button onClick="deleteTacher(${el.id})"
+                                            <button 
+                                        onClick={() => deleteTeacher(el.id)}
                                                 class=" inline-flex items-center justify-center  text-sm font-medium transition-all
                                                 border bg-background  h-8 rounded-md px-3  flex-1 gap-2 text-red-600 ">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
