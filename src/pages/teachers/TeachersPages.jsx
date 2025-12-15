@@ -9,6 +9,8 @@ function TeachersPagas() {
     const [teachers, setTeachers] = useState([]);
     const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState("");
+    const [isModalOpen, setisModalOpen] = useState(false)
+    
 
     async function getAllTeachers() {
         try {
@@ -35,14 +37,13 @@ function TeachersPagas() {
             console.log(err);
         }
     }
-    deleteTeacher()
 
     if (loading) {
         return (
             <div className="flex items-center justify-center flex-col h-screen">
-                <div className=" relative w-[100px] h-[100px] border-[4px] border-black-500 rounded-[50px] animate-spin font-bold  flex
+                <div className=" relative w-[100px] h-[100px] border-4px border-black-500 rounded-[50px] animate-spin font-bold  flex
             items-center justify-center flex-col   ">
-                    <span className="absolute  w-[20px] h-[4px] bg-[white] rounded-[4px] top-[-4px] block "></span>
+                    <span className="absolute  w-20px h-4px bg-[white] rounded-4px top-[-4px] block "></span>
                 </div>
             </div>
         )
@@ -79,15 +80,15 @@ function TeachersPagas() {
                             </div>
 
                             <button
-                                class="inline-flex items-center justify-center text-white text-[12px]  rounded-md text-sm font-medium transition-all   
-                       h-9 px-4 py-2  gap-2 bg-gradient-to-r from-blue-500 to-purple-600 ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                onClick={() => setisModalOpen(true)}
+                                class="inline-flex items-center border  text-white text-[12px]  rounded-md text-sm font-medium transition-all     text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3 gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     class="lucide lucide-plus h-5 w-5" aria-hidden="true">
                                     <path d="M5 12h14"></path>
                                     <path d="M12 5v14"></path>
-                                </svg>
-                                Add Teacher</button>
+                                </svg>Add Teachers</button>
                         </div>
                         <div class="mb-6 space-y-4">
                             <div class="relative">
@@ -103,7 +104,7 @@ function TeachersPagas() {
                                     type="text" className="flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base  outline-none 
                                pl-10 bg-white  border-gray-200"     placeholder="Search teachers by name..." />
                             </div>
-                            <div class="flex flex-wrap items-center gap-[10px]">
+                            <div class="flex flex-wrap items-center gap-10px">
                                 <form class="max-w-sm mx-auto ">
                                     <select id="countries"
                                         class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-gray-200 text-heading text-sm rounded-base focus:ring-brand shadow-xs placeholder:text-body rounded-[10px] bg-white">
@@ -163,7 +164,7 @@ function TeachersPagas() {
                                                 </Link>
                                             </a>
                                             <h3 class="text-[15px] text-black mb-1">{el.name}{el.id}</h3>
-                                            <h1 class="items-center justify-center rounded-md border border-gray-200 px-2 py-0.5 text-xs bg-gray-300 mb-[10px]">{el.profession}</h1>
+                                            <h1 class="items-center justify-center rounded-md border border-gray-200 px-2 py-0.5 text-xs bg-gray-300 mb-10px">{el.profession}</h1>
                                             <div class="flex items-center gap-4 text-gray-600 dark:text-gray-400 mb-3">
                                                 <span
                                                     class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -197,7 +198,7 @@ function TeachersPagas() {
                                             <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm"><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" class="lucide lucide-phone h-4 w-4 flex-shrink-0 text-blue-500"
+                                                stroke-linejoin="round" class="lucide lucide-phone h-4 w-4  text-blue-500"
                                                 aria-hidden="true">
                                                 <path
                                                     d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
@@ -208,7 +209,7 @@ function TeachersPagas() {
                                             <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm"><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" class="lucide lucide-mail h-4 w-4 flex-shrink-0 text-green-500"
+                                                stroke-linejoin="round" class="lucide lucide-mail h-4 w-4  text-green-500"
                                                 aria-hidden="true">
                                                 <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
                                                 <rect x="2" y="4" width="20" height="16" rx="2"></rect>
@@ -219,7 +220,7 @@ function TeachersPagas() {
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" class="lucide lucide-send h-4 w-4 flex-shrink-0 text-blue-400"
+                                                    stroke-linejoin="round" class="lucide lucide-send h-4 w-4  text-blue-400"
                                                     aria-hidden="true">
                                                     <path
                                                         d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
@@ -256,7 +257,7 @@ function TeachersPagas() {
                                                     <path d="m15 5 4 4"></path></svg>
                                                 Edit</button>
                                             <button
-                                                onClick={() => deleteTeacher(el.id)}
+                                                onClick={() => deleteTeacher(el?.id)}
                                                 class="inline-flex items-center justify-center  text-sm font-medium transition-all
                                  border bg-background  h-8 rounded-md px-3  flex-1 gap-2 text-red-600 ">
                                                 <svg
@@ -283,7 +284,31 @@ function TeachersPagas() {
             </div>
 
 
+            {
+                isModalOpen ? (
+                    <div onClick={() => setisModalOpen(false)}
+                        className="fixed top-0 z-20 left-0 w-full h-full bg-black/80 flex items-center justify-center">
+                        <form action=""
+                            className="border border-r-red-50 max-w-[700px] w-full p-5  rounded-[40px] bg-white grid grid-cols-2 gap-5 hover:border-red-500 hover:shadow-xl hover:shadow-blue-600">
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="FullName" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="CreatedAl" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Avatar" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Age" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Experience" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Profession" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Rating" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Gmail" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Username" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Phone" type="text" />
+                            <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Linkedin" type="text" />
+                            <div class="w-full ">
+                                <button 
+                                    class="border rounded-[5px] py-2px px-10px outline-none bg-[orangered] border-[orangered] text-white hover:bg-[blue] hover:border-blue-500 cursor-pointer p-2">Submit</button>
+                            </div>
+                        </form>
+                    </div>) : ""
 
+            }
 
         </>
     )

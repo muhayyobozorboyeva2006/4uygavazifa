@@ -1,15 +1,18 @@
+ 
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function StudentsPages(){
     const [students , setStudents] = useState([]);
     const [loading , setLoading] = useState(true)
     const [search , setSearch]   = useState("")
+    const [isModalOpen , setisModalOpen] = useState(false)
     useEffect(() => {
 async  function getAllStudents(){
 try{
-let reslar = await axios.get(
+let reslar = await   axios.get(
     `https://69242f5d3ad095fb84730f49.mockapi.io/students?name=${search}`
 )
 console.log(reslar.data);
@@ -23,6 +26,19 @@ setLoading(false)
 
 getAllStudents()
     } , [search])
+
+    async function deleteTeacher(id) {
+        try{
+            await axios.delete(`https://69242f5d3ad095fb84730f49.mockapi.io/students/${id}`)
+            toast(`You deleted the teacher with ID ${id}`)
+            getAllStudents()
+        }catch(err){
+            console.log(err);
+            
+        }
+      
+    }
+    deleteTeacher()
 
 if(loading){
     return(
@@ -61,8 +77,10 @@ if(loading){
                                 <h2 class="text-black mb-2">Teachers</h2>
                                 <p class="text-[12px] text-gray-400">Showing 80 of 80 teachers</p>
                             </div>
-                            <button id="cardbtn"
-                                class="inline-flex items-center justify-center text-white text-[12px]  rounded-md text-sm font-medium transition-all     text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3 gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"><svg
+                            <button 
+                                onClick={() => setisModalOpen(true)}
+                                class="inline-flex items-center border  text-white text-[12px]  rounded-md text-sm font-medium transition-all     text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[&gt;svg]:px-3 gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                                    <svg
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                     class="lucide lucide-plus h-5 w-5" aria-hidden="true">
@@ -242,7 +260,7 @@ if(loading){
                                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                                                     <path d="M3 6h18"></path>
                                                     <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                </svg>Delete</button>
+                                                                     </svg>Delete</button>
                                         </div>
                                     </div>
                                 ))
@@ -253,9 +271,38 @@ if(loading){
                 </main>
                
             </div>
-            
+    {
+                isModalOpen ?   (
+                 <div   onClick={() => setisModalOpen(false)} 
+                  className="fixed top-0 z-20 left-0 w-full h-full bg-black/80 flex items-center justify-center">
+                    <form action=""  
+                     className="border border-r-red-50 max-w-[700px] w-full p-5  rounded-[40px] bg-white grid grid-cols-2 gap-5 hover:border-red-500 hover:shadow-xl hover:shadow-blue-600">
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="FullName" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="CreatedAl" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Avatar" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Age" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Experience" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Profession" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Rating" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Gmail" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Username" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Phone" type="text" />
+                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Linkedin" type="text" />
+                        <div class="w-full ">
+                            <button h
+                                class="border rounded-[5px] py-2px px-10px outline-none bg-[orangered] border-[orangered] text-white hover:bg-[blue] hover:border-blue-500 cursor-pointer ">Submit</button>
+                        </div>
+                    </form>
+                </div>) : ""
+
+    }
+
+       
         
         </>
     )
 }
 export default StudentsPages
+
+
+

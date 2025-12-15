@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function SideborLayout(){
@@ -28,7 +28,7 @@ function SideborLayout(){
                             <h1 class="text-black">EduAdmin</h1>
                         </div>
 
-                        <a href=""
+                        <Link to=""
                             class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all outline-none size-9 h-8 w-8 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -36,11 +36,11 @@ function SideborLayout(){
                                 class="lucide lucide-chevron-left h-4 w-4">
                                 <path d="m15 18-6-6 6-6"></path>
                             </svg>
-                        </a>
+                        </Link>
                     </div>
 
                     <nav class="p-4 space-y-2">
-                        <a href="/dashoard"
+                        <Link to="/dashoard"
                             class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -51,9 +51,9 @@ function SideborLayout(){
                                 <rect width="7" height="5" x="3" y="16" rx="1"></rect>
                             </svg>
                             <h1>Dashboard</h1>
-                        </a>
+                        </Link>
 
-                        <a href="/teachers"
+                        <Link to="/teachers" 
                             class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -65,9 +65,9 @@ function SideborLayout(){
                                 <circle cx="9" cy="7" r="4"></circle>
                             </svg>
                             <h1>Teachers</h1>
-                        </a>
+                        </Link>
 
-                        <a href="/students"
+                        <Link to="/students"
                             class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -80,9 +80,9 @@ function SideborLayout(){
                                 <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                             </svg>
                             <h1>Students</h1>
-                        </a>
+                        </Link>
 
-                        <a href="./settings.html"
+                        <Link to="./settings.html"
                             class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -94,7 +94,7 @@ function SideborLayout(){
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                             <h1>Settings</h1>
-                        </a>
+                        </Link>
                         <button onClick={logout}
                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white hover:shadow-lg shadow-blue-500/50">
                             Logout</button>
