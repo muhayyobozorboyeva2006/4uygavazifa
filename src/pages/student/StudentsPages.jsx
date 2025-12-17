@@ -1,7 +1,7 @@
  
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function StudentsPages(){
@@ -9,24 +9,54 @@ function StudentsPages(){
     const [loading , setLoading] = useState(true)
     const [search , setSearch]   = useState("")
     const [isModalOpen , setisModalOpen] = useState(false)
-    useEffect(() => {
-async  function getAllStudents(){
-try{
-let reslar = await   axios.get(
-    `https://69242f5d3ad095fb84730f49.mockapi.io/students?name=${search}`
-)
-console.log(reslar.data);
-setStudents(reslar.data);
-setLoading(false)
-}catch(err){
-    console.log(err);
+    const [teacher , setTeachers] = useState([])
+    const [name , setName] = useState("")
+    const [avatar, setAvatar] = useState("")
+    const [age, setAge] = useState("")
+    const [experience, setExperience] = useState("")
+    const [profession , setProfession]  = useState("")
+    const [rating , setRating] = useState("")
+    const [gmail, setGmail ] = useState("")
+    const [user, setUsername ] = useState("")
+    const [phone, setPhone] = useState("")
+    const [linkedin, setLinkedin ] = useState("")
+    const [grade , setgrade] = useState("")
+    const [selected, setSelected] = useState("null")
+    const [teacherid , setTeachersid ] = useState(null)
+
+
+    async function  getAllTeachers(){
+        try{
+            let res = await axios.get("https://69242f5d3ad095fb84730f49.mockapi.io/teachers")
+            setTeachers(res.data)
+        }catch(err){
+            console.log(err);
+        }
+    }
+    useEffect(()=>{
+      getAllTeachers();
+    } ,[])
     
-}
-}
+    async function getAllStudents() {
+        try {
+            let reslar = await axios.get(
+                `https://69242f5d3ad095fb84730f49.mockapi.io/students?name=${search}`
+            )
+            setStudents(reslar.data);
+            console.log(reslar.data);
+            
+            setLoading(false)
+        } catch (err) {
+            console.log(err);
 
-getAllStudents()
-    } , [search])
+        }
+        }
 
+    useEffect(() => {
+        getAllStudents()
+            } , [search])
+
+            
     async function deleteTeacher(id) {
         try{
             await axios.delete(`https://69242f5d3ad095fb84730f49.mockapi.io/students/${id}`)
@@ -38,7 +68,97 @@ getAllStudents()
         }
       
     }
-    deleteTeacher()
+   
+ 
+async function  addStudents(e) {
+    e.preventDefault()
+
+    console.log("Edit tapped");
+    
+    if (selected) {
+        try {
+            await axios.put(`https://69242f5d3ad095fb84730f49.mockapi.io/students/${selected}`, { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+            toast.success("Siz O'qiduvchini qo'shdingiz");
+            setisModalOpen(false)
+            getAllStudents()
+            setSelected(null)
+            setName("")
+            setAvatar("")
+            setAge("")
+            setExperience("")
+            setProfession("")
+            setRating("")
+            setGmail("")
+            setUsername("")
+            setPhone("")
+            setLinkedin("")
+        } catch (error) {
+            onsole.log(err);
+        }
+    }
+    if(selected == null) {
+        try {
+            await axios.post(`https://69242f5d3ad095fb84730f49.mockapi.io/teachers/${teacherid}/students`, { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+            toast.success("Siz O'qiduvchini qo'shdingiz");
+            setisModalOpen(false)
+            getAllStudents()
+            setSelected(null)
+            setName("")
+            setAvatar("")
+            setAge("")
+            setExperience("")
+            setProfession("")
+            setRating("")
+            setGmail("")
+            setUsername("")
+            setPhone("")
+            setLinkedin("")
+            
+        } catch (err) {
+            console.log(err);
+    
+        }
+    }
+
+}
+
+async function editStudents(id) {
+   setSelected(id)
+   setisModalOpen(true)
+        try {
+            let res = await axios.get(`https://69242f5d3ad095fb84730f49.mockapi.io/students/${id}`);
+            console.log(res.data.name);
+            setName(res.data.name)
+            setAvatar(res.data.avatar)
+            setAge(res.data.age)
+            setExperience(res.data.experience)
+            setProfession(res.data.profession)
+            setRating(res.data.rating)
+            setGmail(res.data.gmail)
+            setUsername(res.data.user)
+            setPhone(res.data.phone)
+            setLinkedin(res.data.linkedin)
+        }catch(err){
+            console.log(err);
+        }
+}
+
+    function closeModal(){
+     setisModalOpen(false)
+     setSelected(null)
+        setName("")
+        setAvatar("")
+        setAge("")
+        setExperience("")
+        setProfession("")
+        setRating("")
+        setGmail("")
+        setUsername("")
+        setPhone("")
+        setLinkedin("")
+        
+    }
+
 
 if(loading){
     return(
@@ -54,7 +174,7 @@ if(loading){
 
     return(
         <>
-            <div class="flex-1 transition-all duration-300 ml-64 bg-gray-50">
+            <div class="flex-1 transition-all duration-300 bg-gray-50">
                 <header class="bg-white  border-b border-gray-200  px-8 py-4 flex items-center justify-between 
                                 top-0 z-10 transition-colors duration-300">
                     <div class="flex items-center gap-4">
@@ -161,8 +281,8 @@ if(loading){
                                             <div class="flex items-center gap-2 mb-3">
                                                 <h1
                                                     class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 ">
-                                                    ${el.profession}</h1>
-                                                <h1 class="text-black">19y</h1>
+                                                    {el.profession}</h1>
+                                                <h1 class="text-black">{el.age}y</h1>
                                             </div>
                                             <div class="w-full space-y-2 mb-3">
                                                 <div class="flex items-center justify-between">
@@ -174,7 +294,7 @@ if(loading){
                                                                 d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
                                                             </path>
                                                         </svg>
-                                                        <h1 class="text-sm text-black">2.1</h1>
+                                                        <h1 class="text-sm text-black">{el.rating}</h1>
                                                     </div>
                                                     <div class="flex items-center gap-1">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -185,7 +305,7 @@ if(loading){
                                                             <path d="M7 6h1v4"></path>
                                                             <path d="m16.71 13.88.7.71-2.82 2.82"></path>
                                                         </svg>
-                                                        <h1 class="text-sm text-black">{el.phon}</h1>
+                                                        <h1 class="text-sm text-black">5</h1>
                                                     </div>
                                                 </div>
 
@@ -203,7 +323,7 @@ if(loading){
                                                         d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
                                                     </path>
                                                 </svg>
-                                                <h1 class="truncate">{el.createdAt}</h1>
+                                                <h1 class="truncate">{el.phone}</h1>
                                             </div>
                                             <div class="flex items-center gap-2 text-gray-600  text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -212,7 +332,7 @@ if(loading){
                                                 <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
                                                 <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                                             </svg>
-                                                <h1 class="truncate">Pete_Lebsack@yahoo.com</h1>
+                                                <h1 class="truncate">{el.gmail}</h1>
                                             </div>
                                             <div class="flex items-center gap-2 text-gray-600  text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -223,7 +343,7 @@ if(loading){
                                                 </path>
                                                 <path d="m21.854 2.147-10.94 10.939"></path>
                                             </svg>
-                                                <h1 class="truncate">@petelebsack</h1>
+                                                <h1 class="truncate">@{el.user}</h1>
                                             </div>
                                             <div class="flex items-center gap-2 text-gray-600  text-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -236,9 +356,12 @@ if(loading){
                                                 <h1>{el.linkedin}</h1>
                                             </div>
                                         </div>
-                                        <div onClick="editTacher(${el.id})"
+                                        <div 
+                                     
                                             class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <button class="inline-flex items-center justify-center  text-sm font-medium  transition-all
+                                            <button
+                                            onClick={() => editStudents(el.id)}
+                                             class="inline-flex items-center justify-center  text-sm font-medium  transition-all
                                             border bg-background text-foreground  h-8 rounded-md px-3  flex-1 gap-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -273,24 +396,64 @@ if(loading){
             </div>
     {
                 isModalOpen ?   (
-                 <div   onClick={() => setisModalOpen(false)} 
+                 <div 
+                        onClick={closeModal} 
                   className="fixed top-0 z-20 left-0 w-full h-full bg-black/80 flex items-center justify-center">
-                    <form action=""  
+                    <form action="" 
+                 onSubmit={addStudents}
+                    onClick={(e) => e.stopPropagation()}
                      className="border border-r-red-50 max-w-[700px] w-full p-5  rounded-[40px] bg-white grid grid-cols-2 gap-5 hover:border-red-500 hover:shadow-xl hover:shadow-blue-600">
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="FullName" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="CreatedAl" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Avatar" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Age" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Experience" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Profession" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Rating" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Gmail" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Username" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Phone" type="text" />
-                        <input className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Linkedin" type="text" />
+                        <input
+                        value={name}
+                    onChange={(e) => setName(e.target.value)}
+                         className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="FullName" type="text" />
+                        <input
+                        value={avatar}
+                    onChange={(e) => setAvatar(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Avatar" type="text" />
+                        <input
+                        value={age} 
+                    onChange={(e) => setAge(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Age" type="text" />    
+                        <input
+                        value={profession}
+                    onChange={(e) => setProfession(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Profession" type="text" />
+                        <input 
+                        value={rating}
+                    onChange={(e) => setRating(e.target.value) }
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Rating" type="text" />
+                        <input 
+                        value={gmail}
+                    onChange={(e) => setGmail(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Gmail" type="text" />
+                        <input
+                        value={user}
+                    onChange={(e) => setUsername(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Username" type="text" />
+                        <input 
+                        value={phone}
+                    onChange={(e) => setPhone(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Phone" type="text" />
+                        <input 
+                        value={linkedin}
+                    onChange={(e) => setLinkedin(e.target.value)}    
+                        className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" placeholder="Linkedin" type="text" />
+                            <select 
+                            onChange={(e) => setTeachersid(e.target.value)} 
+                            className="border rounded-[5px] py-2px px-10px outline-none hover:border-blue-500 hover:shadow-xl hover:shadow-blue-600" >
+                          {
+                            teacher.map((el) => (
+                                <option value={el.id}>{el.name}</option>
+                )) 
+                          }
+                          
+                    </select> 
                         <div class="w-full ">
-                            <button h
-                                class="border rounded-[5px] py-2px px-10px outline-none bg-[orangered] border-[orangered] text-white hover:bg-[blue] hover:border-blue-500 cursor-pointer ">Submit</button>
+                            <button 
+                                type="submit"
+                                class="border rounded-[5px] py-2px px-10px outline-none bg-[orangered] border-[orangered] text-white hover:bg-[blue] hover:border-blue-500 cursor-pointer ">
+                                    {selected ? "Tahrirlash" : "Qo'shish"}</button>
                         </div>
                     </form>
                 </div>) : ""

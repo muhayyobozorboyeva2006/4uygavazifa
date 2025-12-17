@@ -4,7 +4,7 @@ function DashboardPages(){
 
     return(
         <>
-            <div class="flex-1 transition-all duration-300 ml-64 bg-gray-50">
+            <div class="flex-1 transition-all duration-300 bg-gray-50">
                 <header class="bg-white  border-b border-gray-200  px-8 py-4 flex items-center justify-between sticky top-0 z-10 transition-colors duration-300">
                     <div class="flex items-center gap-4">
                         <h1 class=" text-black">School Management System</h1>
