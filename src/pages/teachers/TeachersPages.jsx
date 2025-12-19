@@ -1,13 +1,13 @@
 
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import useGet from "../../hooks/useGet";
+import useModel from "../../hooks/useModel";
 
 function TeachersPagas() {
 
-    const [teachers, setTeachers] = useState([]);
-    const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState("");
     const [isModalOpen, setisModalOpen] = useState(false)
     const [name , setname] = useState("")
@@ -22,21 +22,10 @@ function TeachersPagas() {
     const [linkedin , setLinkedin] = useState("")
     const [ selected , setSelected ] = useState(null)
 
-    async function getAllTeachers() {
-        try {
-            let res = await axios.get(
-                `https://69242f5d3ad095fb84730f49.mockapi.io/teachers?name=${search}`
-            )
-            setTeachers(res.data)
-            setLoading(false)
-        } catch (err) {
-            console.log(err);
-        }
-    }
-    useEffect(() => {
-        getAllTeachers();
-    }, [search])
-    console.log(teachers);
+    const {data:teachers , loading , getAllData} = useGet("teachers")
+    const {addData} = useModel()
+
+  
 
     async function deleteTeacher(id) {
         try {
@@ -47,36 +36,55 @@ function TeachersPagas() {
             console.log(err);
         }
     }
-
-  async  function addTeacher(e){
-    e.preventDefault()
+  
+    async function   addTeacher(e) {
+        e.preventDefault();
 try{
-   if(selected){
-       await axios.put(`https://69242f5d3ad095fb84730f49.mockapi.io/teachers/${selected}`, { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+    if(selected){
+        await addData({ url: "teachers", payload: { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin }, method: "put" })
 
-   }else{
-       await axios.post("https://69242f5d3ad095fb84730f49.mockapi.io/teachers", { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+    }else{
+        await addData({ url: "teachers", payload: { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin }, method: "post" ,
+        id:selected})
 
-   }
-    toast.success("Siz O'qiduvchini qo'shdingiz");
-    setisModalOpen(false)
-    getAllTeachers()
-    setSelected(null)
-    setname("")
-    setAvatar("")
-    setAge("")
-    setExperience("")
-    setProfession("")
-    setRating("")
-    setGmail("")
-    setUsername("")
-    setPhone("")
-    setLinkedin("")
+    }
+getAllData()
+setisModalOpen(false)
 }catch(err){
     console.log(err);
-    
 }
     }
+
+
+//   async  function addTeacher(e){
+//     e.preventDefault()
+// try{
+//    if(selected){
+//        await axios.put(`https://69242f5d3ad095fb84730f49.mockapi.io/teachers/${selected}`, { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+
+//    }else{
+//        await axios.post("https://69242f5d3ad095fb84730f49.mockapi.io/teachers", { name, avatar, age, experience, profession, rating, gmail, user, phone, linkedin })
+
+//    }
+//     toast.success("Siz O'qiduvchini qo'shdingiz");
+//     setisModalOpen(false)
+//     getAllTeachers()
+//     setSelected(null)
+//     setname("")
+//     setAvatar("")
+//     setAge("")
+//     setExperience("")
+//     setProfession("")
+//     setRating("")
+//     setGmail("")
+//     setUsername("")
+//     setPhone("")
+//     setLinkedin("")
+// }catch(err){
+//     console.log(err);
+    
+// }
+//     }
 
    async function editTeacher(id){
     setSelected(id)
@@ -115,17 +123,18 @@ try{
         setLinkedin("")
     }
 
+  
     if (loading) {
         return (
             <div className="flex items-center justify-center flex-col h-screen">
-                <div className=" relative w-[100px] h-[100px] border-4px border-black-500 rounded-[50px] animate-spin font-bold  flex
-            items-center justify-center flex-col   ">
-                    <span className="absolute  w-20px h-4px bg-[white] rounded-4px top-[-4px] block "></span>
+                <div className=" relative w-[100px] h-[100px] border-[4px] border-black-500 rounded-[50px] animate-spin font-bold  flex
+        items-center justify-center flex-col   ">
+                    <span className="absolute  w-[20px] h-[4px] bg-[white] rounded-[4px] top-[-4px] block "></span>
                 </div>
             </div>
         )
     }
-
+    
 
     return (
         <>
@@ -229,7 +238,7 @@ try{
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {
-                                teachers.map((el) => (
+                                teachers?.map((el) => (
 
                                     <div key={el.id}
                                         class="text-card-foreground flex flex-col gap-6 rounded-xl border p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-white  border-gray-200 border-gray-200 group">

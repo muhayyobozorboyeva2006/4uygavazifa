@@ -3,10 +3,9 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { data, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import useStudents from "../../hooks/useStudents";
 
 function StudentsPages(){
-    const [students , setStudents] = useState([]);
-    const [loading , setLoading] = useState(true)
     const [search , setSearch]   = useState("")
     const [isModalOpen , setisModalOpen] = useState(false)
     const [teacher , setTeachers] = useState([])
@@ -20,54 +19,10 @@ function StudentsPages(){
     const [user, setUsername ] = useState("")
     const [phone, setPhone] = useState("")
     const [linkedin, setLinkedin ] = useState("")
-    const [grade , setgrade] = useState("")
     const [selected, setSelected] = useState("null")
     const [teacherid , setTeachersid ] = useState(null)
 
-
-    async function  getAllTeachers(){
-        try{
-            let res = await axios.get("https://69242f5d3ad095fb84730f49.mockapi.io/teachers")
-            setTeachers(res.data)
-        }catch(err){
-            console.log(err);
-        }
-    }
-    useEffect(()=>{
-      getAllTeachers();
-    } ,[])
-    
-    async function getAllStudents() {
-        try {
-            let reslar = await axios.get(
-                `https://69242f5d3ad095fb84730f49.mockapi.io/students?name=${search}`
-            )
-            setStudents(reslar.data);
-            console.log(reslar.data);
-            
-            setLoading(false)
-        } catch (err) {
-            console.log(err);
-
-        }
-        }
-
-    useEffect(() => {
-        getAllStudents()
-            } , [search])
-
-            
-    async function deleteTeacher(id) {
-        try{
-            await axios.delete(`https://69242f5d3ad095fb84730f49.mockapi.io/students/${id}`)
-            toast(`You deleted the teacher with ID ${id}`)
-            getAllStudents()
-        }catch(err){
-            console.log(err);
-            
-        }
-      
-    }
+    const {students:students , loading} = useStudents("students")
    
  
 async function  addStudents(e) {
